@@ -15,7 +15,7 @@ public class Education {
     private String yearOfObtention;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id" ,referencedColumnName = "ID")
     private User user;
 
 

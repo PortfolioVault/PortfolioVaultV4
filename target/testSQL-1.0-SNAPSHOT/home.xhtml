@@ -58,19 +58,13 @@
     </div>
     <div class="section-container">
         <h3 class="section-title">Your Educational Background</h3>
-        <c:if test="#{not empty educationBean.allEducations}">
-
+        <c:if test="#{not empty educationBean.allEducation}">
             <div class="cards-container">
-                <ui:repeat value="#{educationBean.allEducations}" var="education">
+                <ui:repeat value="#{educationBean.allEducation}" var="education">
                     <div class="card">
                         <h3>#{education.diplomat}</h3>
                         <p><strong>University:</strong> #{education.university}</p>
                         <p><strong>Year of obtention:</strong> #{education.yearOfObtention}</p>
-<!--                        <h:form>-->
-<!--                            &lt;!&ndash; Pass the education ID to your delete endpoint &ndash;&gt;-->
-<!--                            <input type="hidden" name="educationId" value="#{education.id}" />-->
-<!--                            <h:commandButton value="Delete" action="#{educationBean.deleteById(education.id)}" />-->
-<!--                        </h:form>-->
                     </div>
                 </ui:repeat>
             </div>

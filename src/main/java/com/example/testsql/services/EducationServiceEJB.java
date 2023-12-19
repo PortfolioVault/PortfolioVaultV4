@@ -2,34 +2,30 @@ package com.example.testsql.services;
 import com.example.testsql.models.Education;
 import com.example.testsql.models.User;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+
 import java.util.List;
 
 @Stateless
-public class EducationService {
+public class EducationServiceEJB {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void addEducation(String email, String diplomat, String university, String yearOfObtention) {
-
+    public void addEducation(String email, Education education) {
         User user = findUserByEmail(email);
-        if (user != null) {
-            Education education = new Education(diplomat, university, yearOfObtention);
 
-            // Définir la relation bidirectionnelle entre Education et User
+        if (user != null) {
             education.setUser(user);
             user.getEducations().add(education);
-            entityManager.persist(education);
             entityManager.merge(user);
-
         }
     }
 
-    public List<Education> getAllEducations(String email) {
+    public List<Education> getEducation(String email) {
+        // Find the User entity by email
         User user = findUserByEmail(email);
         if (user != null) {
             // Return the list of experiences from the user entity
@@ -37,9 +33,6 @@ public class EducationService {
         } else {
             return null;
         }
-//        TypedQuery<Education> query = entityManager.createQuery("SELECT e FROM Education e WHERE e.user.email = :email", Education.class);
-//        query.setParameter("email", email);
-//        return query.getResultList();
     }
 
     private User findUserByEmail(String email) {
@@ -47,13 +40,5 @@ public class EducationService {
         query.setParameter("email", email);
         List<User> resultList = query.getResultList();
         return resultList.isEmpty() ? null : resultList.get(0);
-    }
-
-    public void deleteById(String id) {
-        // Find the Education entity by ID and remove it
-        Education education = entityManager.find(Education.class, Long.parseLong(id));
-        if (education != null) {
-            entityManager.remove(education);
-        }
     }
 }

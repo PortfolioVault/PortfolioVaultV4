@@ -1,9 +1,10 @@
 package com.example.testsql.views;
 
 import com.example.testsql.models.Education;
-import com.example.testsql.services.EducationService;
+import com.example.testsql.models.Experience;
+import com.example.testsql.services.EducationServiceEJB;
+import com.example.testsql.services.UserServiceEJB;
 import com.example.testsql.session.UserSession;
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -17,40 +18,47 @@ import java.util.List;
 @Named
 @ViewScoped
 public class EducationBean implements Serializable {
+
+    @Inject
+    private UserServiceEJB userServiceEJB;
+    @Inject
+    private EducationServiceEJB educationServiceEJB;
+    @Inject
+    private UserSession userSession;
+
+    private Education education;
+
     private String diplomat;
     private String university;
     private String yearOfObtention;
     private String emailUser;
 
-    @Inject
-    private UserSession userSession;
-    @Inject
-    private EducationService educationService;
 
-    public void save(){
+
+    public String ajouterEducation() {
+        education=new Education(diplomat,university,yearOfObtention);
+
+        //ajouter les données dans la database
+        educationServiceEJB.addEducation(userSession.getEmail(), education);
+
+        //redirection
         FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
         try{
-            educationService.addEducation(userSession.getEmail(),diplomat,university,yearOfObtention);
-            FacesMessage message = new FacesMessage("Success", "Infos saved successfully");
-            context.addMessage(null, message);
-
-            ExternalContext externalContext = context.getExternalContext();
-            try {
-                externalContext.redirect(externalContext.getRequestContextPath() + "/home.xhtml");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }catch (Exception exception){
-            FacesMessage message = new FacesMessage("Something went wrong", "An error has occured");
-            context.addMessage(null, message);
+            externalContext.redirect(externalContext.getRequestContextPath() + "/home.xhtml");
+        }catch(IOException e){
+            e.printStackTrace();
         }
+        diplomat = "";
+        university = "";
+        yearOfObtention = "";
+        return null;
+
     }
 
-    public List<Education> getAllEducations(){
-        return educationService.getAllEducations(userSession.getEmail());
+    public List<Education> getAllEducation(){
+        return educationServiceEJB.getEducation(userSession.getEmail());
     }
-    public void deleteById(String id){educationService.deleteById(id);}
-
 
     public String getDiplomat() {
         return diplomat;
@@ -83,22 +91,4 @@ public class EducationBean implements Serializable {
     public void setEmailUser(String emailUser) {
         this.emailUser = emailUser;
     }
-
-    public UserSession getUserSession() {
-        return userSession;
-    }
-
-    public void setUserSession(UserSession userSession) {
-        this.userSession = userSession;
-    }
-
-    public EducationService getEducationService() {
-        return educationService;
-    }
-
-    public void setEducationService(EducationService educationService) {
-        this.educationService = educationService;
-    }
-
 }
-

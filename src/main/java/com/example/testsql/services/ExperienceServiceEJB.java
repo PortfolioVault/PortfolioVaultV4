@@ -5,10 +5,9 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+
 
 @Stateless
 public class ExperienceServiceEJB {
@@ -22,19 +21,15 @@ public class ExperienceServiceEJB {
         User user = findUserByEmail(email);
 
         if (user != null) {
-            // Add the experience to the user's list of experiences
+            experience.setUser(user);
             user.getExperiences().add(experience);
-
-            // Update the user entity in the database
             entityManager.merge(user);
         }
     }
 
     public List<Experience> getExperiences(String email) {
-        // Find the User entity by email
         User user = findUserByEmail(email);
         if (user != null) {
-            // Return the list of experiences from the user entity
             return  user.getExperiences();
         } else {
             return null;

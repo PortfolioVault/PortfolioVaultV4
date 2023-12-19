@@ -4,7 +4,7 @@ package com.example.testsql.views;
 import com.example.testsql.models.Education;
 import com.example.testsql.models.Experience;
 import com.example.testsql.models.User;
-import com.example.testsql.services.EducationService;
+import com.example.testsql.services.EducationServiceEJB;
 import com.example.testsql.services.ExperienceServiceEJB;
 import com.example.testsql.services.UserServiceEJB;
 import com.example.testsql.session.UserSession;
@@ -24,7 +24,7 @@ public class ProfilPageBean implements Serializable {
     @Inject
     private ExperienceServiceEJB experienceServiceEJB;
     @Inject
-    private EducationService educationService;
+    private EducationServiceEJB educationService;
     @Inject
     private UserSession userSession;
 
@@ -36,8 +36,8 @@ public class ProfilPageBean implements Serializable {
     private String address;
     private String age;
     private String professionalTitle;
-    private LinkedList<Experience> experiences = new LinkedList<>();
-    private LinkedList<Education> educations = new LinkedList<>();
+    private List<Experience> experiences = new LinkedList<>();
+    private List<Education> educations = new LinkedList<>();
 
 
     public void getUser() {
@@ -118,7 +118,7 @@ public class ProfilPageBean implements Serializable {
     }
 
     public List<Education> getEducations() {
-        return educationService.getAllEducations(this.email);
+        return educationService.getEducation(userSession.getEmail());
     }
 
     public void setEducations(LinkedList<Education> educations) {
