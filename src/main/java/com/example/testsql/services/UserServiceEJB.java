@@ -2,6 +2,7 @@ package com.example.testsql.services;
 import com.example.testsql.exceptions.EmailAlreadyTakenException;
 import com.example.testsql.models.User;
 import com.example.testsql.session.UserSession;
+import jakarta.ejb.Stateful;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -11,14 +12,13 @@ import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Objects;
 
-@Stateless
+@Stateful
 public class UserServiceEJB {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Inject
-    private UserSession userSession;
+
 
     public void registerUser(String firstName, String lastName, String email, String password) throws EmailAlreadyTakenException {
         User user = findUserByEmail(email);
@@ -69,4 +69,7 @@ public class UserServiceEJB {
             entityManager.merge(user);
         }
     }
+
+    @Inject
+    private UserSession userSession;
 }
