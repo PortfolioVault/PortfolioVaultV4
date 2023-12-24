@@ -127,21 +127,24 @@ public class OffreListPageBean implements Serializable {
     }
 
     public void accepterCandidature() {
-        condidatureServiceEJB.addCandidature(user,offre);
+        condidatureServiceEJB.addCandidature(user, offre);
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
-        try{
-            externalContext.redirect(externalContext.getRequestContextPath() + "/condidature.xhtml");
-        }catch(IOException e){
+        try {
+            externalContext.redirect(externalContext.getRequestContextPath() + "/viewListOffres.xhtml");
+            context.responseComplete();  // Indique à JSF que la réponse est complète
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public void rejeterCandidature() {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         try{
-            externalContext.redirect(externalContext.getRequestContextPath() + "/condidature.xhtml");
+            externalContext.redirect(externalContext.getRequestContextPath() + "/viewListOffres.xhtml");
+            context.responseComplete();
         }catch(IOException e){
             e.printStackTrace();
         }
