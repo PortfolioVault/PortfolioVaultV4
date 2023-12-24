@@ -3,8 +3,11 @@ package com.example.testsql.views.company;
 import com.example.testsql.activeMQ.SimpleQueue;
 import com.example.testsql.models.Entreprise;
 import com.example.testsql.models.Offre;
+import com.example.testsql.models.User;
 import com.example.testsql.services.company.CompanyServiceEJB;
+import com.example.testsql.services.company.CondidatureServiceEJB;
 import com.example.testsql.services.company.OffreServiceEJB;
+import com.example.testsql.services.user.UserServiceEJB;
 import com.example.testsql.session.CompanySession;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.context.ExternalContext;
@@ -12,11 +15,11 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
@@ -24,8 +27,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @Named
 @ViewScoped
@@ -33,16 +34,25 @@ public class OffreListPageBean implements Serializable {
     private static final String QUEUE_NAME = "pendingPostulat";
     private List<List<String>> receivedMessages;
 
-    private String email; // Email de l'entreprise, peut être passé en paramètre ou récupéré autrement
+    private String email;
     private Entreprise entreprise;
     private List<Offre> offres;
+    private User user;
+    private Offre offre;
 
     @Inject
-    private OffreServiceEJB offreService; // Assurez-vous d'avoir un service pour gérer les offres
+    private OffreServiceEJB offreService;
+
     @Inject
     private CompanyServiceEJB companyServiceEJB;
+
+    @Inject
+    private CondidatureServiceEJB condidatureServiceEJB ;
+
+
     @Inject
     private CompanySession companySession;
+
 
     public void loadEntrepriseData() {
         // Charger les données de l'entreprise et ses offres
@@ -60,83 +70,47 @@ public class OffreListPageBean implements Serializable {
         }
     }
 
-//    public Future<List<List<String>>> receiveAsync() {
-//        return CompletableFuture.supplyAsync(() -> {
-//            try {
-//                SimpleQueue queue = new SimpleQueue(QUEUE_NAME);
-//                byte[] msgBytes = queue.receive();
-//                queue.close();
-//
-//                // Convertir les octets en chaîne
-//                String msg = new String(msgBytes, StandardCharsets.UTF_8);
-//
-//                System.out.println("le msg reçu est " + msg);
-//
-//                // Supposons que msg est une chaîne au format "Nom:<|>Prénom:PDFBytes"
-//                String[] parts = msg.split(":");
-//                String[] nameParts = parts[0].split("<\\|>");
-//                String nom = nameParts[0];
-//                String prenom = nameParts[1];
-//                String pdfBytes = parts[1];
-//
-//                // Créer une liste contenant le nom, le prénom et le PDF
-//                List<String> receivedMessage = Arrays.asList(nom, prenom, pdfBytes);
-//
-//                // Ajouter la liste à receivedMessages
-//                List<List<String>> receivedMessages = Collections.singletonList(receivedMessage);
-//
-//                System.out.println("le nom est " + nom);
-//                System.out.println("le prénom est " + prenom);
-//                return receivedMessages;
-//            } catch (Exception e) {
-//                e.printStackTrace(); // Gérer les erreurs correctement dans un environnement de production
-//                return Collections.emptyList();
-//            }
-//        });
-//    }
 
-    public Future<List<String>> receiveAsync() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public CompletableFuture<List<String>> receiveAsync() {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 SimpleQueue queue = new SimpleQueue(QUEUE_NAME);
                 byte[] nameBytes = queue.receive();
                 queue.close();
-
                 // Convert the received bytes to a string
                 String combinedString = new String(nameBytes, StandardCharsets.UTF_8);
-
-                // Split the string based on the delimiter (colon ":")
                 String[] parts = combinedString.split(":");
 
                 if (parts.length >= 2) {
-                    String id_user = parts[0];
+                    String email_user = parts[0];
                     String id_offre = parts[1];
 
-                    // Create a list with individual data fields
-                    List<String> receivedMessage = Arrays.asList(id_user, id_offre);
+                    user = userServiceEJB.findUserByEmail(email_user);
+//                    user.setEducations(userServiceEJB.findEducationsByUserId(user.getId()));
+//                    user.setExperiences(userServiceEJB.findExperiencesByUserId(user.getId()));
+                    System.out.println("test ======="+user.getEducations());
+                    offre = offreService.findOffreById(Long.valueOf(id_offre));
+                        List<String> receivedMessage = Arrays.asList(email_user,offre.getDescription());
 
-                    System.out.println("Received data: id_user=" + id_user + ", id_offre=" + id_offre);
                     return receivedMessage;
                 } else {
                     System.out.println("Invalid data format");
                     return Collections.emptyList();
                 }
-
-                // Convertir les octets en chaîne
-//                String name = new String(nameBytes, StandardCharsets.UTF_8);
-//
-//                // Créer une liste contenant le nom
-//                List<String> receivedMessage = Collections.singletonList(name);
-//
-//                System.out.println("le nom reçu est " + name);
-//                return receivedMessage;
             } catch (Exception e) {
-                e.printStackTrace(); // Gérer les erreurs correctement dans un environnement de production
+                e.printStackTrace();
                 return Collections.emptyList();
             }
         });
     }
-
 
     public List<List<String>> getReceivedMessages() {
         return receivedMessages;
@@ -149,6 +123,27 @@ public class OffreListPageBean implements Serializable {
             externalContext.redirect(externalContext.getRequestContextPath() + "/condidature.xhtml");
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void accepterCandidature() {
+        condidatureServiceEJB.addCandidature(user,offre);
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        try{
+            externalContext.redirect(externalContext.getRequestContextPath() + "/condidature.xhtml");
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void rejeterCandidature() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        try{
+            externalContext.redirect(externalContext.getRequestContextPath() + "/condidature.xhtml");
+        }catch(IOException e){
+            e.printStackTrace();
         }
     }
 
@@ -204,5 +199,10 @@ public class OffreListPageBean implements Serializable {
     public void setOffres(List<Offre> offres) {
         this.offres = offres;
     }
+
+    @Inject
+    private UserServiceEJB userServiceEJB;
+
+
 }
 

@@ -1,6 +1,8 @@
 package com.example.testsql.services.user;
 import com.example.testsql.activeMQ.SimpleQueue;
 import com.example.testsql.exceptions.EmailAlreadyTakenException;
+import com.example.testsql.models.Education;
+import com.example.testsql.models.Experience;
 import com.example.testsql.models.Offre;
 import com.example.testsql.models.User;
 import com.example.testsql.session.UserSession;
@@ -69,44 +71,49 @@ public class UserServiceEJB {
         }
     }
 
+
+    public List<Education> findEducationsByUserId(int userId) {
+        TypedQuery<Education> query = entityManager.createQuery(
+                "SELECT e FROM Education e WHERE e.user.id = :userId",
+                Education.class
+        );
+        query.setParameter("userId", userId);
+
+        return query.getResultList();
+    }
+
+    public List<Experience> findExperiencesByUserId(int userId) {
+        TypedQuery<Experience> query = entityManager.createQuery(
+                "SELECT exp FROM Experience exp WHERE exp.user.id = :userId",
+                Experience.class
+        );
+        query.setParameter("userId", userId);
+
+        return query.getResultList();
+    }
+
+    public User findUserByIdWithEducationsAndExperiences(String email) {
+        TypedQuery<User> query = entityManager.createQuery(
+                "SELECT u FROM User u LEFT JOIN FETCH u.educations LEFT JOIN FETCH u.experiences WHERE u.email = :email",
+                User.class
+        );
+        query.setParameter("email", email);
+
+        List<User> resultList = query.getResultList();
+
+        return resultList.isEmpty() ? null : resultList.get(0);
+    }
+
+
     @Inject
     private UserSession userSession;
 
-//    public void postuler(Offre offre) {
-//        User user = findUserByEmail(userSession.getEmail());
-//
-//        try {
-//            // Chemin du fichier PDF dans votre projet
-//            String filePath = "C:\\Users\\hp\\IdeaProjects\\stateful\\PortfolioVaultV4\\src\\main\\java\\com\\example\\testsql\\pdf\\" + user.getFirstName() + " " + user.getLastName() + ".pdf";
-//            System.out.println("firstName" + user.getFirstName());
-//
-//            // Lire le fichier en tant qu'octets
-//            byte[] fileBytes = Files.readAllBytes(new File(filePath).toPath());
-//
-//            // Convertir le nom et le prénom en octets
-//            byte[] nameBytes = (user.getFirstName() + "<|>" + user.getLastName()).getBytes(StandardCharsets.UTF_8);
-//
-//            // Créer un tableau combiné
-//            byte[] combinedBytes = new byte[nameBytes.length + fileBytes.length];
-//            System.arraycopy(nameBytes, 0, combinedBytes, 0, nameBytes.length);
-//            System.arraycopy(fileBytes, 0, combinedBytes, nameBytes.length, fileBytes.length);
-//
-//            // Envoyer le contenu combiné en tant que tableau d'octets
-//            SimpleQueue queue = new SimpleQueue(QUEUE_NAME);
-//            System.out.println("le message à envoyer est**** " + Arrays.toString(combinedBytes));
-//
-//            queue.send(combinedBytes);
-//            queue.close();
-//        } catch (Exception e) {
-//            e.printStackTrace(); // Gérer les erreurs correctement dans un environnement de production
-//        }
-//    }
     public void postuler(Offre offre) {
         User user = findUserByEmail(userSession.getEmail());
 
         try {
             // Convertir le nom et le prénom en octets
-            byte[] nameBytes = (user.getId()+":"+offre.getId()).getBytes(StandardCharsets.UTF_8);
+            byte[] nameBytes = (userSession.getEmail()+":"+offre.getId()).getBytes(StandardCharsets.UTF_8);
 
             // Envoyer le contenu combiné en tant que tableau d'octets
             SimpleQueue queue = new SimpleQueue(QUEUE_NAME);

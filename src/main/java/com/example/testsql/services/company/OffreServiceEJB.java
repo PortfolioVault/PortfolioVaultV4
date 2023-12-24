@@ -48,4 +48,10 @@ public class OffreServiceEJB {
         return offreEntrepriseMap;
     }
 
+    public Offre findOffreById(Long id) {
+        TypedQuery<Offre> query = entityManager.createQuery("SELECT e FROM Offre e WHERE e.id = :id", Offre.class);
+        query.setParameter("id", id);
+        return  query.getResultList().get(0);
+    }
 }
+

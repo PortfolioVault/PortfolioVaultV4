@@ -87,5 +87,13 @@ public class CompanyServiceEJB {
 //        TypedQuery<Entreprise> query = entityManager.createQuery("SELECT DISTINCT e FROM Entreprise e LEFT JOIN FETCH e.offres", Entreprise.class);
 //        return query.getResultList();
     }
+
+    public Entreprise findCompnayByIdOffre(String email) {
+        TypedQuery<Entreprise> query = entityManager.createQuery("SELECT e FROM Entreprise e WHERE e.email = :email", Entreprise.class);
+        query.setParameter("email", email); // Assurez-vous que l'ID est du bon type (par exemple, Long)
+        List<Entreprise> resultList = query.getResultList();
+
+        return resultList.isEmpty() ? null : resultList.get(0);
+    }
 }
 
