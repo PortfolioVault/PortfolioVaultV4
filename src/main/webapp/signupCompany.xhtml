@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="styles/signup-styles.css"/>
+</head>
+<body>
+<h1 class="signup-heading">Sign Up</h1>
+<div class="flash-messages-container">
+    <h:messages globalOnly="true" layout="table" styleClass="flash-messages" />
+</div><div class="form-container">
+<h:form styleClass="form">
+    <div class="form-control">
+        <label for="name">Name</label>
+        <h:inputText id="name" value="#{signupCompanyBean.name}" placeholder="Name" />
+    </div>
+    <div class="form-control">
+        <label for="email">Email</label>
+        <h:inputText id="email" value="#{signupCompanyBean.email}" placeholder="Email" />
+    </div>
+<!--    <div class="form-control">-->
+<!--        <label for="secteurTravail">Secteur de Travail</label>-->
+<!--        <h:selectOneMenu id="secteurTravail" value="#{signupCompanyBean.secteurTravail}" style="width: 150px;">-->
+<!--            <f:selectItem itemLabel="&#45;&#45; Select &#45;&#45;" itemValue="" />-->
+<!--            <f:selectItem itemLabel="INFORMATIQUE" itemValue="INFORMATIQUE" />-->
+<!--            <f:selectItem itemLabel="MARKETING" itemValue="MARKETING" />-->
+<!--            <f:selectItem itemLabel="FINANCE" itemValue="FINANCE" />-->
+<!--        </h:selectOneMenu>-->
+<!--    </div>-->
+    <div class="form-control">
+        <label for="phone">Phone</label>
+        <h:inputText id="phone" value="#{signupCompanyBean.phone}" placeholder="Phone" />
+    </div>
+    <div class="form-control">
+        <label for="password">Password</label>
+        <h:inputSecret id="password" value="#{signupCompanyBean.password}" placeholder="Password" />
+    </div>
+    <h:commandButton styleClass="submit-btn" value="Sign Up" action="#{signupCompanyBean.signup}" />
+    <div class="account-state-container">
+        <p>Already have an account? <a href="loginCompany.xhtml">Login</a></p>
+    </div>
+</h:form>
+</div>
+
+</body>
+</html>
+

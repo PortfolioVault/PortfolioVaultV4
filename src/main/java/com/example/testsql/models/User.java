@@ -1,4 +1,6 @@
 package com.example.testsql.models;
+import com.example.testsql.models.Education;
+import com.example.testsql.models.Experience;
 import jakarta.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
