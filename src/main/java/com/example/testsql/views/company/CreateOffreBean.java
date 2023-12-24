@@ -1,6 +1,5 @@
 package com.example.testsql.views.company;
 
-import com.example.testsql.models.Experience;
 import com.example.testsql.models.Offre;
 import com.example.testsql.services.company.CompanyServiceEJB;
 import com.example.testsql.services.company.OffreServiceEJB;

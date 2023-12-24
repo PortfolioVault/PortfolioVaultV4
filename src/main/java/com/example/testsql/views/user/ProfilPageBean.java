@@ -8,10 +8,18 @@ import com.example.testsql.services.user.EducationServiceEJB;
 import com.example.testsql.services.user.ExperienceServiceEJB;
 import com.example.testsql.services.user.UserServiceEJB;
 import com.example.testsql.session.UserSession;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +60,72 @@ public class ProfilPageBean implements Serializable {
         this.phoneNumber = user.getPhoneNumber() != null ? user.getPhoneNumber() : "";
 //        this.experiences = experienceServiceEJB.getExperiences(userSession.getEmail());
     }
+
+    public void generatePDF() {
+        Document document = new Document();
+
+        try {
+            // Obtenez le chemin du fichier PDF de sortie avec le nom d'utilisateur
+            String pdfPath = "C:\\Users\\hp\\IdeaProjects\\stateful\\PortfolioVaultV4\\src\\main\\java\\com\\example\\testsql\\pdf\\" + firstName +" "+lastName + ".pdf";
+
+            PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
+
+            document.open();
+
+            // Ajoutez les données à votre document PDF avec mise en forme
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16);
+            Font sectionFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
+            Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
+
+            // Titre
+            document.add(new Paragraph(getFirstName() + " " + getLastName(), titleFont));
+
+            // Infos personnelles
+            document.add(new Paragraph("Professional Title: " + getProfessionalTitle(), normalFont));
+            document.add(new Paragraph("Age: " + getAge(), normalFont));
+            document.add(new Paragraph("Email: " + getEmail(), normalFont));
+            document.add(new Paragraph("Address: " + getAddress(), normalFont));
+            document.add(new Paragraph("Phone Number: " + getPhoneNumber(), normalFont));
+
+            // Éducation
+            document.add(new Paragraph("Education", sectionFont));
+            if (!educationService.getEducation(userSession.getEmail()).isEmpty()) {
+                for (Education education : educationService.getEducation(userSession.getEmail())) {
+                    document.add(new Paragraph("Date d'Obtention: " + education.getYearOfObtention(), normalFont));
+                    document.add(new Paragraph("Diplôme: " + education.getDiplomat(), normalFont));
+                    document.add(new Paragraph("Université: " + education.getUniversity(), normalFont));
+                    document.add(new Paragraph(" ", normalFont)); // Ajoutez un espace entre chaque entrée
+                }
+            }
+
+            // Expériences professionnelles
+            document.add(new Paragraph("Experiences", sectionFont));
+            if (!experienceServiceEJB.getExperiences(userSession.getEmail()).isEmpty()) {
+                for (Experience experience : experienceServiceEJB.getExperiences(userSession.getEmail())) {
+                    document.add(new Paragraph("Date de Début: " + experience.getStartDate(), normalFont));
+                    document.add(new Paragraph("Date de Fin: " + experience.getEndDate(), normalFont));
+                    document.add(new Paragraph("Rôle: " + experience.getRole(), normalFont));
+                    document.add(new Paragraph("Entreprise: " + experience.getCompany(), normalFont));
+                    document.add(new Paragraph(" ", normalFont)); // Ajoutez un espace entre chaque entrée
+                }
+            }
+
+            // Fermez le document
+            document.close();
+
+            FacesContext context = FacesContext.getCurrentInstance();
+            try{
+                FacesMessage message = new FacesMessage("Success", "Pdf Exported successfully");
+                context.addMessage(null, message);
+            }catch (Exception exception){
+                FacesMessage message = new FacesMessage("Something went wrong", "An error has occured");
+                context.addMessage(null, message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public String getFirstName() {
         return firstName;
@@ -124,6 +198,8 @@ public class ProfilPageBean implements Serializable {
     public void setEducations(LinkedList<Education> educations) {
         this.educations = educations;
     }
+
+
 }
 
 

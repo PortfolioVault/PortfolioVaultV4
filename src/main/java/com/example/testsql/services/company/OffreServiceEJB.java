@@ -7,7 +7,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 public class OffreServiceEJB {
@@ -31,4 +33,19 @@ public class OffreServiceEJB {
         List<Entreprise> resultList = query.getResultList();
         return resultList.isEmpty() ? null : resultList.get(0);
     }
+
+    public Map<Offre, Entreprise> getAllOffresWithEntreprisesMap() {
+        String jpql = "SELECT o, e FROM Offre o JOIN o.entreprise e";
+        List<Object[]> resultList = entityManager.createQuery(jpql, Object[].class).getResultList();
+
+        Map<Offre, Entreprise> offreEntrepriseMap = new HashMap<>();
+        for (Object[] result : resultList) {
+            Offre offre = (Offre) result[0];
+            Entreprise entreprise = (Entreprise) result[1];
+            offreEntrepriseMap.put(offre, entreprise);
+        }
+
+        return offreEntrepriseMap;
+    }
+
 }

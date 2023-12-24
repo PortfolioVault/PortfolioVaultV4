@@ -18,7 +18,12 @@
     <h:form>
        <h:commandButton value="Logout" styleClass="submit-btn" action="#{homePageBean.logout}"/>
     </h:form>
+    <h:form>
+        <h:commandButton value="Postuler" styleClass="submit-btn" action="#{homePageBean.redirectToPostulationPage}"/>
+    </h:form>
 </div>
+
+
 <div class="section-container" id="personnal-infos">
         <h3 class="section-title">Personal Infos</h3>
         <h:messages globalOnly="true" layout="table" styleClass="flash-messages" />

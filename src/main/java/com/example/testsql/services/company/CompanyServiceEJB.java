@@ -71,8 +71,6 @@ public class CompanyServiceEJB {
 
     public List<Entreprise> getEntreprisesWithOffres() {
         TypedQuery<Entreprise> query = entityManager.createQuery("SELECT DISTINCT e FROM Entreprise e LEFT JOIN FETCH e.offres", Entreprise.class);
-//        List<Entreprise> entreprises = query.getResultList();
-
         return query.getResultList();
     }
 }

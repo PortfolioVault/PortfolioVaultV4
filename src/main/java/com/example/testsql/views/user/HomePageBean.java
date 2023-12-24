@@ -3,9 +3,15 @@ package com.example.testsql.views.user;
 import com.example.testsql.models.Education;
 import com.example.testsql.models.Experience;
 import com.example.testsql.models.User;
+import com.example.testsql.services.user.EducationServiceEJB;
 import com.example.testsql.services.user.ExperienceServiceEJB;
 import com.example.testsql.services.user.UserServiceEJB;
 import com.example.testsql.session.UserSession;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
@@ -13,6 +19,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -24,6 +31,8 @@ public class HomePageBean implements Serializable {
     private UserServiceEJB userServiceEJB;
     @Inject
     private ExperienceServiceEJB experienceServiceEJB;
+    @Inject
+    private EducationServiceEJB educationServiceEJB;
     @Inject
     private UserSession userSession;
     private String firstName;
@@ -46,7 +55,9 @@ public class HomePageBean implements Serializable {
         this.age = user.getAge() != null ? user.getAge() : "";
         this.professionalTitle = user.getProfessionalTitle() != null ? user.getProfessionalTitle() : "";
         this.phoneNumber = user.getPhoneNumber() != null ? user.getPhoneNumber() : "";
-//        this.experiences = experienceServiceEJB.getExperiences(userSession.getEmail());
+//        this.experiences = (LinkedList<Experience>) experienceServiceEJB.getExperiences(userSession.getEmail());
+//        this.educations = (LinkedList<Education>) educationServiceEJB.getEducation(userSession.getEmail());
+
     }
 
     public void logout(){
@@ -150,5 +161,16 @@ public class HomePageBean implements Serializable {
 
     public void setExperiences(LinkedList<Experience> experiences) {
         this.experiences = experiences;
+    }
+
+
+    public void redirectToPostulationPage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        try {
+            externalContext.redirect(externalContext.getRequestContextPath() + "/postulationHome.xhtml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

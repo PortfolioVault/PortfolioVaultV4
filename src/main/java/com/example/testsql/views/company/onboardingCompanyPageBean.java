@@ -143,4 +143,24 @@ public class onboardingCompanyPageBean implements Serializable {
     public void setSelectedSecteurTravail(Entreprise.SecteurTravail selectedSecteurTravail) {
         this.selectedSecteurTravail = selectedSecteurTravail;
     }
+
+    public void redirectToCreateOffre() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        try {
+            externalContext.redirect(externalContext.getRequestContextPath() + "/createOffre.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void redirectToHomePage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        try {
+            externalContext.redirect(externalContext.getRequestContextPath() + "/homeCompanyPage.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

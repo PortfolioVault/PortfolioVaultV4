@@ -32,14 +32,23 @@
             </h:selectOneMenu>
         </div>
         <div class="form-control">
+            <label for="address">Address</label>
+            <h:inputText id="address" value="#{onboardingCompanyPageBean.address}" placeholder="Address" />
+        </div>
+        <div class="form-control">
+            <label for="phone">Phone</label>
+            <h:inputText id="phone" value="#{onboardingCompanyPageBean.phone}" placeholder="Phone" />
+        </div>
+        <div class="form-control">
             <label for="nombreEmployes">Nombre d'Employés</label>
             <h:inputText id="nombreEmployes" value="#{onboardingCompanyPageBean.nbrEmplyes}" style="width: 150px;" />
         </div>
         <h:commandButton value="Save" styleClass="submit-btn" action="#{onboardingCompanyPageBean.saveInfos}"/>
-    </h:form>
+    </h:form> <h:form>
     <h:commandButton value="Postulation"  />
-    <h:commandButton value="Publier des Offres"  />
-    <h:commandButton value="Actualités"  />
+    <h:commandButton value="Publier des Offres"  action="#{onboardingCompanyPageBean.redirectToCreateOffre}" />
+    <h:commandButton value="Actualités" action="#{onboardingCompanyPageBean.redirectToHomePage}" />
+</h:form>
 </div>
 </body>
 </html>

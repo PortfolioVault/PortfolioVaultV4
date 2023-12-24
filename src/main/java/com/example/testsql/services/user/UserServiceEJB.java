@@ -1,5 +1,6 @@
 package com.example.testsql.services.user;
 import com.example.testsql.exceptions.EmailAlreadyTakenException;
+import com.example.testsql.models.Offre;
 import com.example.testsql.models.User;
 import com.example.testsql.session.UserSession;
 import jakarta.ejb.Stateful;
@@ -8,6 +9,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
 
@@ -67,4 +72,22 @@ public class UserServiceEJB {
 
     @Inject
     private UserSession userSession;
+
+    public void postuler(Offre offre) {
+        User user = findUserByEmail(userSession.getEmail());
+        String pdfPath = "C:\\Users\\hp\\IdeaProjects\\stateful\\PortfolioVaultV4\\src\\main\\java\\com\\example\\testsql\\pdf\\" + user.getFirstName() + " " + user.getLastName() + ".pdf";
+//envoyer dans JMS
+        //TEST pour tester si il recuper lobjet ou pas
+        String pdfTestFolderPath = "C:\\Users\\hp\\IdeaProjects\\stateful\\PortfolioVaultV4\\src\\main\\java\\com\\example\\testsql\\pdfTest\\";
+        Path sourcePath = Paths.get(pdfPath);
+        java.nio.file.Path targetPath = Paths.get(pdfTestFolderPath + user.getFirstName() + " " + user.getLastName() + ".pdf");
+
+        try {
+            Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Autres opérations liées à la postulation...
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
