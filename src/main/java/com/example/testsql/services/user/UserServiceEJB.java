@@ -1,4 +1,5 @@
 package com.example.testsql.services.user;
+import com.example.testsql.activeMQ.SimpleQueue;
 import com.example.testsql.exceptions.EmailAlreadyTakenException;
 import com.example.testsql.models.Offre;
 import com.example.testsql.models.User;
@@ -9,10 +10,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +21,7 @@ public class UserServiceEJB {
     @PersistenceContext
     private EntityManager entityManager;
 
-
+    private static final String QUEUE_NAME = "pendingPostulat";
 
     public void registerUser(String firstName, String lastName, String email, String password) throws EmailAlreadyTakenException {
         User user = findUserByEmail(email);
@@ -73,21 +72,50 @@ public class UserServiceEJB {
     @Inject
     private UserSession userSession;
 
+//    public void postuler(Offre offre) {
+//        User user = findUserByEmail(userSession.getEmail());
+//
+//        try {
+//            // Chemin du fichier PDF dans votre projet
+//            String filePath = "C:\\Users\\hp\\IdeaProjects\\stateful\\PortfolioVaultV4\\src\\main\\java\\com\\example\\testsql\\pdf\\" + user.getFirstName() + " " + user.getLastName() + ".pdf";
+//            System.out.println("firstName" + user.getFirstName());
+//
+//            // Lire le fichier en tant qu'octets
+//            byte[] fileBytes = Files.readAllBytes(new File(filePath).toPath());
+//
+//            // Convertir le nom et le prénom en octets
+//            byte[] nameBytes = (user.getFirstName() + "<|>" + user.getLastName()).getBytes(StandardCharsets.UTF_8);
+//
+//            // Créer un tableau combiné
+//            byte[] combinedBytes = new byte[nameBytes.length + fileBytes.length];
+//            System.arraycopy(nameBytes, 0, combinedBytes, 0, nameBytes.length);
+//            System.arraycopy(fileBytes, 0, combinedBytes, nameBytes.length, fileBytes.length);
+//
+//            // Envoyer le contenu combiné en tant que tableau d'octets
+//            SimpleQueue queue = new SimpleQueue(QUEUE_NAME);
+//            System.out.println("le message à envoyer est**** " + Arrays.toString(combinedBytes));
+//
+//            queue.send(combinedBytes);
+//            queue.close();
+//        } catch (Exception e) {
+//            e.printStackTrace(); // Gérer les erreurs correctement dans un environnement de production
+//        }
+//    }
     public void postuler(Offre offre) {
         User user = findUserByEmail(userSession.getEmail());
-        String pdfPath = "C:\\Users\\hp\\IdeaProjects\\stateful\\PortfolioVaultV4\\src\\main\\java\\com\\example\\testsql\\pdf\\" + user.getFirstName() + " " + user.getLastName() + ".pdf";
-//envoyer dans JMS
-        //TEST pour tester si il recuper lobjet ou pas
-        String pdfTestFolderPath = "C:\\Users\\hp\\IdeaProjects\\stateful\\PortfolioVaultV4\\src\\main\\java\\com\\example\\testsql\\pdfTest\\";
-        Path sourcePath = Paths.get(pdfPath);
-        java.nio.file.Path targetPath = Paths.get(pdfTestFolderPath + user.getFirstName() + " " + user.getLastName() + ".pdf");
 
         try {
-            Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            // Convertir le nom et le prénom en octets
+            byte[] nameBytes = (user.getId()+":"+offre.getId()).getBytes(StandardCharsets.UTF_8);
 
-            // Autres opérations liées à la postulation...
+            // Envoyer le contenu combiné en tant que tableau d'octets
+            SimpleQueue queue = new SimpleQueue(QUEUE_NAME);
+
+            queue.send(nameBytes);
+            queue.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Gérer les erreurs correctement dans un environnement de production
         }
     }
+
 }

@@ -9,8 +9,8 @@
 <div class="container">
     <h1>Portfolio Vault</h1>
     <h4>The one place to showcase all your skills</h4>
-    <a href="signupCompany.xhtml">Get Started As a Company</a>
-    <a href="signup.xhtml">Get Started As a User</a>
+    <a href="signupCompany.xhtml">Space Company</a>
+    <a href="signup.xhtml">Space User</a>
 </div>
 </body>
 </html>

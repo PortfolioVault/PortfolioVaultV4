@@ -40,6 +40,12 @@ public class Offre {
         INFORMATIQUE,MARKETING,FINANCE
     }
 
+    public Long getId() {
+        return id;
+    }
+
+
+
     public Offre(int salaire, String niveauExperience, String role, String description, SecteurTravail secteurTravail, Type type) {
         this.salaire = salaire;
         this.niveauExperience = niveauExperience;

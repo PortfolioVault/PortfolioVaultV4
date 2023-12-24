@@ -15,8 +15,8 @@
 </f:metadata>
 
 <div class="section-container">
-    <h3 class="section-title">Offres de l'entreprise #{offreListPageBean.entreprise.name}</h3>
-
+    <h2 class="section-title">Welcome #{offreListPageBean.entreprise.name}</h2>
+    <h3>Your Offers </h3>
     <c:if test="#{not empty offreListPageBean.offres}">
         <ui:repeat value="#{offreListPageBean.offres}" var="offre">
             <div class="offre">

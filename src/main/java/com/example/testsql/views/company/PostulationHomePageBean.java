@@ -40,6 +40,7 @@ public class PostulationHomePageBean implements Serializable {
     public void postuler(Offre offre) {
         userServiceEJB.postuler(offre);
 
+
     }
 }
 
