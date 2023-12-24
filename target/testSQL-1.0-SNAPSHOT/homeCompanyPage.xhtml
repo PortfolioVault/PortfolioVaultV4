@@ -16,27 +16,24 @@
 
 <div class="section-container">
     <h:form>
-        <h:commandButton value="Créer une offre"  action="#{homeCompanyPageBean.redirectToCreateOffre}"/>
+        <h:commandButton value="Create offre"  action="#{homeCompanyPageBean.redirectToCreateOffre}"/>
+        <h:commandButton value="View My offres"  action="#{homeCompanyPageBean.redirectToViewOffres}"/>
     </h:form>
-    <h3 class="section-title">Entreprises and Offres</h3>
+    <h3 class="section-title">Offres des entreprises</h3>
     <c:if test="#{not empty homeCompanyPageBean.entreprisesWithOffres}">
         <div class="cards-container">
-            <ui:repeat value="#{homeCompanyPageBean.entreprisesWithOffres}" var="entreprise">
+            <ui:repeat value="#{homeCompanyPageBean.entreprisesWithOffres.entrySet()}" var="entry">
                 <div class="card">
-                    <h3>#{entreprise.name} - #{entreprise.secteurTravail}</h3>
+                    <h3>#{entry.value.name} - #{entry.value.secteurTravail}</h3>
 
                     <div class="offres-container">
-                        <ui:repeat value="#{entreprise.offres}" var="offre">
-                            <div class="offre">
-                                <h4>Description: #{offre.description}</h4>
-                                <p>Niveau d'expérience: #{offre.niveauExperience}</p>
-                                <p>Poste: #{offre.role}</p>
-                                <p>Salaire: #{offre.salaire}</p>
-                            </div>
-                        </ui:repeat>
+                        <h4>Offre:</h4>
+                        <h:outputText value="Description: #{entry.key.description}" />
+                        <p>Niveau d'expérience: #{entry.key.niveauExperience}</p>
+                        <p>Poste: #{entry.key.role}</p>
+                        <p>Salaire: #{entry.key.salaire}</p>
+
                     </div>
-
-
                 </div>
             </ui:repeat>
         </div>

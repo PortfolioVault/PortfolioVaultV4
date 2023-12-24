@@ -1,6 +1,7 @@
 package com.example.testsql.services.company;
 import com.example.testsql.exceptions.EmailAlreadyTakenException;
 import com.example.testsql.models.Entreprise;
+import com.example.testsql.models.Offre;
 import com.example.testsql.models.User;
 import com.example.testsql.session.CompanySession;
 import jakarta.ejb.Stateful;
@@ -9,7 +10,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Stateful
@@ -69,9 +72,20 @@ public class CompanyServiceEJB {
         }
     }
 
-    public List<Entreprise> getEntreprisesWithOffres() {
-        TypedQuery<Entreprise> query = entityManager.createQuery("SELECT DISTINCT e FROM Entreprise e LEFT JOIN FETCH e.offres", Entreprise.class);
-        return query.getResultList();
+    public Map<Offre, Entreprise> getEntreprisesWithOffres() {
+        String jpql = "SELECT o, e FROM Offre o JOIN o.entreprise e";
+        List<Object[]> resultList = entityManager.createQuery(jpql, Object[].class).getResultList();
+
+        Map<Offre, Entreprise> offreEntrepriseMap = new HashMap<>();
+        for (Object[] result : resultList) {
+            Offre offre = (Offre) result[0];
+            Entreprise entreprise = (Entreprise) result[1];
+            offreEntrepriseMap.put(offre, entreprise);
+        }
+
+        return offreEntrepriseMap;
+//        TypedQuery<Entreprise> query = entityManager.createQuery("SELECT DISTINCT e FROM Entreprise e LEFT JOIN FETCH e.offres", Entreprise.class);
+//        return query.getResultList();
     }
 }
 
