@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+body{
+    font-family: "Roboto", sans-serif;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+.signup-heading{
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 3rem 0;
+    color: #333333;
+}
+
+.form-container{
+   width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.form{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-control{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    color: #333333;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.form-control input{
+    padding: 0.5rem 1rem;
+    color: #333333;
+}
+
+.form-control input::placeholder{
+    color: #555555;
+}
+
+.submit-btn{
+    background-color: #0077FF;
+    color: #eee;
+    font-weight: normal;
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 20rem;
+    border: none;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+
+.submit-btn:hover{
+    filter: brightness(90%);
+}
+
+.flash-messages-container{
+    width: 100%;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.account-state-container{
+    width: 100%;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.account-state-container a{
+    text-decoration: underline;
+    color: #0077FF;
+}

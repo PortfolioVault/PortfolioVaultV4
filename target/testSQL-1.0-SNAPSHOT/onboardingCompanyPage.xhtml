@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head>
+    <title>More Informations</title>
+    <link rel="stylesheet" href="styles/home-styles.css"/>
+</head>
+<body>
+<f:metadata>
+    <f:event type="preRenderView" listener="#{onboardingCompanyPageBean.fetchCompany}" />
+</f:metadata>
+
+<div class="logout-container">
+    <h:form>
+        <h:commandButton value="Logout" styleClass="submit-btn" action="#{onboardingCompanyPageBean.logout}"/>
+    </h:form>
+</div>
+
+<div class="section-container" id="personnal-infos">
+    <h1 class="section-title">More Informations</h1>
+    <h:messages globalOnly="true" layout="table" styleClass="flash-messages" />
+
+    <h:form styleClass="form">
+        <div class="form-control">
+            <label for="secteurTravail">Secteur de Travail</label>
+            <h:selectOneMenu id="secteurTravail" value="#{onboardingCompanyPageBean.selectedSecteurTravail}" style="width: 150px;">
+                <f:selectItem itemLabel="-- Select --" itemValue="" />
+                <f:selectItems value="#{onboardingCompanyPageBean.secteurTravailValues}" var="secteur" itemLabel="#{secteur}" itemValue="#{secteur}" />
+            </h:selectOneMenu>
+        </div>
+        <div class="form-control">
+            <label for="address">Address</label>
+            <h:inputText id="address" value="#{onboardingCompanyPageBean.address}" placeholder="Address" />
+        </div>
+        <div class="form-control">
+            <label for="phone">Phone</label>
+            <h:inputText id="phone" value="#{onboardingCompanyPageBean.phone}" placeholder="Phone" />
+        </div>
+        <div class="form-control">
+            <label for="nombreEmployes">Nombre d'Employés</label>
+            <h:inputText id="nombreEmployes" value="#{onboardingCompanyPageBean.nbrEmplyes}" style="width: 150px;" />
+        </div>
+        <h:commandButton value="Save" styleClass="submit-btn" action="#{onboardingCompanyPageBean.saveInfos}"/>
+    </h:form> <h:form>
+    <h:commandButton value="Postulation"  />
+    <h:commandButton value="Publier des Offres"  action="#{onboardingCompanyPageBean.redirectToCreateOffre}" />
+    <h:commandButton value="Actualités" action="#{onboardingCompanyPageBean.redirectToHomePage}" />
+</h:form>
+</div>
+</body>
+</html>

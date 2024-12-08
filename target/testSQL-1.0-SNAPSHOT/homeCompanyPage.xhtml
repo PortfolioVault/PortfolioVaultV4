@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<f:metadata>
+    <f:viewAction action="#{homeCompanyPageBean.fetchCompanyOffre}" />
+</f:metadata>
+
+<div class="section-container">
+    <h:form>
+        <h:commandButton value="Create offre"  action="#{homeCompanyPageBean.redirectToCreateOffre}"/>
+        <h:commandButton value="View My offres"  action="#{homeCompanyPageBean.redirectToViewOffres}"/>
+    </h:form>
+    <h3 class="section-title">Offres des entreprises</h3>
+    <c:if test="#{not empty homeCompanyPageBean.entreprisesWithOffres}">
+        <div class="cards-container">
+            <ui:repeat value="#{homeCompanyPageBean.entreprisesWithOffres.entrySet()}" var="entry">
+                <div class="card">
+                    <h3>#{entry.value.name} - #{entry.value.secteurTravail}</h3>
+
+                    <div class="offres-container">
+                        <h4>Offre:</h4>
+                        <h:outputText value="Description: #{entry.key.description}" />
+                        <p>Niveau d'expérience: #{entry.key.niveauExperience}</p>
+                        <p>Poste: #{entry.key.role}</p>
+                        <p>Salaire: #{entry.key.salaire}</p>
+
+                    </div>
+                </div>
+            </ui:repeat>
+        </div>
+    </c:if>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <head>
+        <title>Experiences</title>
+        <link rel="stylesheet" type="text/css" href="styles/Experience-styles.css" />
+    </head>
+    <body>
+    <h1>Add your experience</h1>
+    <h:form>
+        <h:outputLabel for="startDate" value="Start Date : " />
+        <h:inputText id="startDate" value="#{experienceBean.startDate}" required="true" requiredMessage="La saisie du date début est obligatoire !"  />
+        <h:message for="startDate" styleClass="errorBlock" /> <br/>
+        <br/>
+        <h:outputLabel for="endDate" value="End Date : " />
+        <h:inputText id="endDate" value="#{experienceBean.endDate}" required="true" requiredMessage="La saisie du date fin est obligatoire !" />
+        <h:message for="endDate" styleClass="errorBlock" /> <br/>
+        <br/>
+        <h:outputLabel for="company" value="Company : " />
+        <h:inputText id="company" value="#{experienceBean.company}" required="true" requiredMessage="La saisie de l'entreprise est obligatoire !" />
+        <h:message for="company" styleClass="errorBlock" /> <br/>
+        <br/>
+        <h:outputLabel for="role" value="Role : " />
+        <h:inputText id="role" value="#{experienceBean.role}" required="true" requiredMessage="La saisie de ton role est obligatoire !"/>
+        <h:message for="role" styleClass="errorBlock" /> <br/>
+        <br/>
+        <h:commandButton value="Save" styleClass="submit-btn" action="#{experienceBean.ajouterExperience()}" />
+    </h:form>
+    </body>
+</f:view>
+</html>

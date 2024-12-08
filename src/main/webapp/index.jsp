@@ -2,12 +2,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>Portfolio Vault</title>
+    <link rel="stylesheet" href="styles/landingPage-styles.css"/>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="index.xhtml">Hello Servlet</a>
+<div class="container">
+    <h1>Portfolio Vault</h1>
+    <h4>The one place to showcase all your skills</h4>
+    <a href="signupCompany.xhtml">Get Started As a Company</a>
+    <a href="signup.xhtml">Get Started As a User</a>
+</div>
 </body>
 </html>

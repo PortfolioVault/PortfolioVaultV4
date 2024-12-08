@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="styles/signup-styles.css"/>
+</head>
+<body>
+<h1 class="signup-heading">Sign Up</h1>
+<div class="flash-messages-container">
+    <h:messages globalOnly="true" layout="table" styleClass="flash-messages" />
+</div><div class="form-container">
+<h:form styleClass="form">
+    <div class="form-control">
+        <label for="firstName">First Name</label>
+        <h:inputText id="firstName" value="#{signupBean.firstName}" placeholder="First Name" />
+    </div>
+    <div class="form-control">
+        <label for="lastName">Last Name</label>
+        <h:inputText id="lastName" value="#{signupBean.lastName}" placeholder="Last Name" />
+    </div>
+    <div class="form-control">
+        <label for="email">Email</label>
+        <h:inputText id="email" value="#{signupBean.email}" placeholder="Email" />
+    </div>
+    <div class="form-control">
+        <label for="password">Password</label>
+        <h:inputSecret id="password" value="#{signupBean.password}" placeholder="Password" />
+    </div>
+    <h:commandButton styleClass="submit-btn" value="Sign Up" action="#{signupBean.signup}" />
+    <div class="account-state-container">
+        <p>Already have an account? <a href="login.xhtml">Login</a></p>
+    </div>
+</h:form>
+</div>
+
+</body>
+</html>
+

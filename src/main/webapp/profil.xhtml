@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head>
+    <title>#{profilPageBean.firstName} Portfolio</title>
+    <link rel="stylesheet" href="styles/Profile_style.css"/>
+</head>
+<body>
+<f:metadata>
+    <f:event type="preRenderView" listener="#{profilPageBean.getUser}" />
+</f:metadata>
+<h:form>
+    <h:commandButton value="Export PDF" action="#{profilPageBean.generatePDF}" />
+</h:form>
+<h1>#{profilPageBean.firstName} #{profilPageBean.lastName}</h1>
+
+<h2>Personal Infos</h2>
+<ul>
+    <li>Professional Title: #{profilPageBean.professionalTitle}</li>
+    <li>Age: #{profilPageBean.age}</li>
+    <li>Email: #{profilPageBean.email}</li>
+    <li>Address: #{profilPageBean.address}</li>
+    <li>Phone Number: #{profilPageBean.phoneNumber}</li>
+</ul>
+<h2>Educations</h2>
+<c:if test="#{not empty profilPageBean.educations}">
+<h:dataTable value="#{profilPageBean.educations}" var="education" styleClass="education-table">
+    <h:column>
+        <f:facet name="header">Date d'Obtention</f:facet>
+        #{education.yearOfObtention}
+    </h:column>
+    <h:column>
+        <f:facet name="header">Diplôme</f:facet>
+        #{education.diplomat}
+    </h:column>
+    <h:column>
+        <f:facet name="header">Université</f:facet>
+        #{education.university}
+    </h:column>
+</h:dataTable>
+</c:if>
+
+<h2>Experiences</h2>
+<c:if test="#{not empty profilPageBean.experiences}">
+<h:dataTable value="#{profilPageBean.experiences}" var="experience" styleClass="experience-table">
+    <h:column>
+        <f:facet name="header">Date de Début</f:facet>
+        #{experience.startDate}
+    </h:column>
+    <h:column>
+        <f:facet name="header">Date de Fin</f:facet>
+        #{experience.endDate}
+    </h:column>
+    <h:column>
+        <f:facet name="header">Rôle</f:facet>
+        #{experience.role}
+    </h:column>
+    <h:column>
+        <f:facet name="header">Entreprise</f:facet>
+        #{experience.company}
+    </h:column>
+</h:dataTable>
+</c:if>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<head>
+    <title>Entreprise Offres</title>
+</head>
+<body>
+<f:metadata>
+    <f:viewAction action="#{offreListPageBean.loadEntrepriseData}" />
+</f:metadata>
+
+<div class="section-container">
+    <h3 class="section-title">Offres de l'entreprise #{offreListPageBean.entreprise.name}</h3>
+
+    <c:if test="#{not empty offreListPageBean.offres}">
+        <ui:repeat value="#{offreListPageBean.offres}" var="offre">
+            <div class="offre">
+                <h4>Description: #{offre.description}</h4>
+                <p>Niveau d'expérience: #{offre.niveauExperience}</p>
+                <p>Poste: #{offre.role}</p>
+                <p>Salaire: #{offre.salaire}</p>
+
+                <h:form>
+                    <h:commandButton value="Voir les Candidatures" action="#{offreListPageBean.redirectToCandidatures(offre)}" />
+                </h:form>
+            </div>
+        </ui:repeat>
+    </c:if>
+</div>
+</body>
+</html>

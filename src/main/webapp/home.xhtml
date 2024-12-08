@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head>
+    <title>#{homePageBean.firstName} Portfolio</title>
+    <link rel="stylesheet" href="styles/home-styles.css"/>
+</head>
+<body>
+<f:metadata>
+    <f:event type="preRenderView" listener="#{homePageBean.fetchUser}" />
+</f:metadata>
+<div class="logout-container">
+    <h:form>
+       <h:commandButton value="Logout" styleClass="submit-btn" action="#{homePageBean.logout}"/>
+    </h:form>
+    <h:form>
+        <h:commandButton value="Postuler" styleClass="submit-btn" action="#{homePageBean.redirectToPostulationPage}"/>
+    </h:form>
+</div>
+
+
+<div class="section-container" id="personnal-infos">
+        <h3 class="section-title">Personal Infos</h3>
+        <h:messages globalOnly="true" layout="table" styleClass="flash-messages" />
+        <h:form styleClass="form">
+            <div class="entered-infos">
+                <p>First Name:</p>
+                <p>#{homePageBean.firstName}</p>
+            </div>
+            <div class="entered-infos">
+                <p>Last Name:</p>
+                <p>#{homePageBean.lastName}</p>
+            </div>
+            <div class="entered-infos">
+                <p>Email: </p>
+                <p>#{homePageBean.email}</p>
+            </div>
+            <div class="form-control">
+                <label for="professional-title">Professional Title</label>
+                <h:inputText id="professional-title" value="#{homePageBean.professionalTitle}"/>
+            </div>
+            <div class="form-control">
+                <label for="phone-number">Phone Number</label>
+                <h:inputText id="phone-number" value="#{homePageBean.phoneNumber}"/>
+            </div>
+            <div class="form-control">
+                <label for="address">Address</label>
+                <h:inputText id="address" value="#{homePageBean.address}"/>
+            </div>
+            <div class="form-control">
+                <label for="age">Age</label>
+                <h:inputText id="age" value="#{homePageBean.age}"/>
+            </div>
+            <div class="submit-container">
+                <h:commandButton value="Save" styleClass="submit-btn" actionListener="#{homePageBean.savePersonalInfos}"/>
+            </div>
+        </h:form>
+    </div>
+    <div class="section-container">
+        <h3 class="section-title">Your Educational Background</h3>
+        <c:if test="#{not empty educationBean.allEducation}">
+            <div class="cards-container">
+                <ui:repeat value="#{educationBean.allEducation}" var="education">
+                    <div class="card">
+                        <h3>#{education.diplomat}</h3>
+                        <p><strong>University:</strong> #{education.university}</p>
+                        <p><strong>Year of obtention:</strong> #{education.yearOfObtention}</p>
+                    </div>
+                </ui:repeat>
+            </div>
+        </c:if>
+        <div class="submit-container">
+            <a href="EducationForm.xhtml" class="submit-btn">Add New</a>
+        </div>
+    </div>
+<div class="section-container">
+    <h3 class="section-title">Your Work Experiences</h3>
+    <c:if test="#{not empty experienceBean.allExperiences}">
+        <div class="cards-container">
+            <ui:repeat value="#{experienceBean.allExperiences}" var="experience">
+                <div class="card">
+                    <h3>#{experience.role}</h3>
+                    <p><strong>Company:</strong> #{experience.company}</p>
+                    <p><strong>Start Date:</strong> #{experience.startDate}</p>
+                    <p><strong>Finish Date:</strong> #{experience.endDate}</p>
+                </div>
+            </ui:repeat>
+        </div>
+    </c:if>
+    <div class="submit-container">
+        <a href="addExperience.xhtml" class="submit-btn">Add New</a>
+    </div>
+</div>
+<div class="submit-all-container">
+    <a href="profil.xhtml" class="submit-btn">Preview</a>
+</div>
+</body>
+</html>
